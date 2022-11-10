@@ -1,0 +1,57 @@
+﻿@model IEnumerable<CarViewModel>
+
+@{
+    ViewBag.Title = "All Cars";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+<div class="d-grid gap-2 mb-2">
+    <a asp-controller="Cars" asp-action="Add" class="btn btn-primary">Add Car</a>
+</div>
+
+
+@if (Model.Count() > 0)
+{
+    <div class="row">
+        @foreach (var car in Model)
+        {
+            <div class="col-sm-6">
+                <div class="card ">
+                    <div class="card-body">
+                        <h4 class="card-title text-center">Make: @car.Make</h4>
+                        <h4 class="card-title text-center">Model: @car.Model</h4>
+                        <h4 class="card-title text-center">Color: @car.Color</h4>
+                        <h4 class="card-title text-center">Is car available: @car.IsAvailable</h4>
+                        <div class="d-grid gap-2">
+                            <a asp-controller="Cars" asp-action="Edit" asp-route-id="@car.Id" class="btn btn-warning">Edit</a>
+                            <form class="mt-2" asp-controller="Cars" asp-action="Delete" asp-route-id="@car.Id">
+                                <div class="d-grid gap-2">
+                                    <input type="submit" value="Delete" class="btn btn-danger mb-2"
+                                        onclick="return confirm('Are you sure you want to delete car: @car.Make')"/>
+                                </div>
+                            </form>
+                            <form class="mt-2" asp-controller="Cars" asp-action="Rent" asp-route-id="@car.Id">
+                                <div class="d-grid gap-2">
+                                    @if (car.IsAvailable == "Not Available")
+                                    {
+                                        <input type="submit" value="Rent" class="btn btn-success"
+                                            onclick="return confirm('This car is not available!')"/>
+                                    }
+                                    else
+                                    {
+                                        <input type="submit" value="Rent" class="btn btn-success" />
+                                    }
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p class="text-center">No cars added yet!</p>
+}
